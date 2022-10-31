@@ -1,3 +1,7 @@
+# Information
+
+---
+
 # BasicPayments
 
 Smart contract and basic service to solve payments in the Taller de Programacion 2' projects.
