@@ -37,12 +37,12 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
       console.error("reasons List");
       console.error(reasonsList);
 
-      console.error("message");
-      console.error(message);
-    },
-  );
-  return tx;
-};
+        console.error("message");
+        console.error(message);
+      },
+    );
+    return tx;
+  };
 
 
 const sendPayment = ({ config }) => async (receiverWallet, amountToReceive) => {

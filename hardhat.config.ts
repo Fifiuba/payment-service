@@ -10,7 +10,6 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 
 import { removeConsoleLog } from "hardhat-preprocessor";
-import "hardhat-prettier";
 import "hardhat-typechain";
 import { HardhatUserConfig } from "hardhat/config";
 import { NetworkUserConfig } from "hardhat/types";
