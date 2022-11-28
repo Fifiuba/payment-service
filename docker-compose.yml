@@ -9,15 +9,15 @@ services:
     depends_on:
       - db
 
-  db:
-    container_name: mongo-dev
+  mongo:
+    container_name: mongo
     image: mongo:latest
     ports: 
       - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=Payment
+      - MONGO_INITDB_DATABASE=Payments
     volumes:
       - data:/data/db
 
@@ -31,7 +31,7 @@ services:
       - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
       - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD}
     depends_on:
-      - db
+      - mongo
     ports:
       - "8081:8081"
     restart: always

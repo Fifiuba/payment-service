@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 class PaymentsDatabase {
   async connectDB() {
     try {
-      await mongoose.connect('mongodb://root:root@db:27017', {
+      await mongoose.connect('mongodb://root:root@mongo:27017', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         auth: {
           authSource: 'admin',
         },
-        user: root,
-        pass: root,
+        user: process.env.ME_CONFIG_MONGODB_ADMINUSERNAME,
+        pass: process.env.ME_CONFIG_MONGODB_ADMINPASSWORD,
         dbName: 'Payment_db',
 
       });
