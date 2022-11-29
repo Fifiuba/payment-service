@@ -19,9 +19,9 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=Payments
     volumes:
-      - data:/data/db
+      - paymentsVolume:/data/db
 
-  mongo-express:
+  mongo-express-payment:
     container_name: mongo-express
     image: mongo-express:latest
     environment:
@@ -37,4 +37,4 @@ services:
     restart: always
 
 volumes:
-  data:
+  paymentsVolume:
