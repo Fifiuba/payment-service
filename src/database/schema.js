@@ -6,11 +6,21 @@ const {Schema} = mongoose;
 const WalletSchema = new Schema({
     user_id: Number,
     address: String,
-    privateKey: String
+    privateKey: String,
+    amount: Number
+});
+
+const TransactionSchema = new Schema({
+    tx: String,
+    from: String,
+    to: String,
+    amount: String
 });
 
 // To use our schema definition, we need to convert it
 // into a Model we can work with Instances of Models are documents
 const WalletModel = mongoose.model('Wallet', WalletSchema);
+const TransactionModel = mongoose.model('Transaction', TransactionSchema);
 
-module.exports = {WalletModel};
+
+module.exports = {WalletModel,TransactionModel};
