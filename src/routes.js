@@ -9,7 +9,7 @@ const getInfo = require("./handlers/getInfoHandler");
 function getInfoRoute({ config }) {
   return {
     method: "GET",
-    url: "/",
+    url: "/payment",
     schema: getInfo.schema(config),
     handler: getInfo.handler(),
   };
@@ -18,7 +18,7 @@ function getInfoRoute({ config }) {
 function getWalletDataRoute({ services, config }) {
   return {
     method: "GET",
-    url: "/wallet/:id",
+    url: "/payment/wallet/:id",
     schema: getWalletData.schema(config),
     handler: getWalletData.handler({ config, ...services }),
   };
@@ -27,7 +27,7 @@ function getWalletDataRoute({ services, config }) {
 function getWalletsDataRoute({ services, config }) {
   return {
     method: "GET",
-    url: "/wallet",
+    url: "/payment/wallet",
     schema: getWalletsData.schema(config),
     handler: getWalletsData.handler({ config, ...services }),
   };
@@ -36,7 +36,7 @@ function getWalletsDataRoute({ services, config }) {
 function createWalletRoute({ services, config }) {
   return {
     method: "POST",
-    url: "/wallet",
+    url: "/payment/wallet",
     schema: createWallet.schema(config),
     handler: createWallet.handler({ config, ...services }),
   };
@@ -45,7 +45,7 @@ function createWalletRoute({ services, config }) {
 function createDepositRoute({ services, config }) {
   return {
     method: "POST",
-    url: "/deposit",
+    url: "/payment/deposit",
     schema: createDeposit.schema(config),
     handler: createDeposit.handler({ config, ...services }),
   };
@@ -54,7 +54,7 @@ function createDepositRoute({ services, config }) {
 function getDepositRoute({ services, config }) {
   return {
     method: "GET",
-    url: "/deposit/:txHash",
+    url: "/payment/deposit/:txHash",
     schema: getDeposit.schema(config),
     handler: getDeposit.handler({ config, ...services }),
   };

@@ -7,7 +7,7 @@ services:
     - "3000:3000"
     restart: always
     depends_on:
-      - db
+      - mongo
 
   mongo:
     container_name: mongo
