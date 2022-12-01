@@ -1,7 +1,7 @@
 const { WalletModel, TransactionModel } = require('../database/schema');
 
 
-const saveTransaction = async (t) => {
+const saveTransaction = () => async (t) => {
     try {
         const transaction = TransactionModel(t)
         const transactionSaved =  await transaction.save();
@@ -12,13 +12,20 @@ const saveTransaction = async (t) => {
 }
 
 const saveWallet = async (w) => {
-    try {
-        const wallet = WalletModel(w)
-        const walletSaved =  await wallet.save();
+    let walletSaved = await WalletModel.findOne({user_id: w.user_id}) 
+    if (walletSaved){
+        console.log('There is an already saved wallet for this user')
+        return walletSaved
+    }
+    try {      
+        const wallet = new WalletModel(w)
+        walletSaved =  await wallet.save();
         console.log('wallet saved:' + JSON.stringify(walletSaved))
     } catch (error) {
-        console.error('could not insert new wallet to database')
-    }  
+        //console.error('could not insert new wallet to database')
+        console.log('could not insert new wallet to database')
+    } 
+    return walletSaved
     
 }
 
@@ -31,15 +38,12 @@ const getTransactions = async() => {
     }
 }
 
-const getTransaction = async (id) => {
+const getTransaction =  async (id) => {
     const transaction = TransactionModel.findById(id).exec();
-    
-    if (!transaction) throw new TransactionNotFoundError();
-
     return transaction
 }
 
-const getWallets = async() => {
+const getWallets =  async() => {
     try {
         const wallets = WalletModel.find({});
         return wallets
@@ -48,21 +52,17 @@ const getWallets = async() => {
     }
 }
 
-const getWallet = async (id) => {
-    const wallet = WalletModel.findById(id).exec();
-
-    if (!wallet) throw new WalletNotFoundError();
+const getWallet = async (user_id) => {
+    const wallet = await WalletModel.findOne({user_id: user_id});
     return wallet
 }
 
 
-module.exports = () => ({
-    saveTransaction: saveTransaction,
-    saveWallet: saveWallet,
-    getTransaction: getTransaction,
-    getTransactions: getTransactions,
-    getWallet: getWallet,
-    getWallets: getWallets,
-});
-
-module.exports = {saveWallet,saveTransaction};
+module.exports = {
+    saveTransaction,
+    saveWallet,
+    getTransaction,
+    getTransactions,
+    getWallet,
+    getWallets,
+};
