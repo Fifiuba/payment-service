@@ -1,14 +1,21 @@
 const { WalletModel, TransactionModel } = require('../database/schema');
 
 
-const saveTransaction = () => async (t) => {
+const saveTransaction = async (t) => {
+    let transactionSaved = await TransactionModel.findOne({tx: t.tx}) 
+    if (transactionSaved){
+        console.log('There is an already saved transaction for this user')
+        return transactionSaved
+    }
     try {
-        const transaction = TransactionModel(t)
-        const transactionSaved =  await transaction.save();
+        const transaction = new TransactionModel(t)
+        transactionSaved =  await transaction.save();
+        console.log(transactionSaved)
         console.log('transaction saved:' + JSON.stringify(transactionSaved))
     } catch (error) {
         console.error('could not insert new transaction to database')
     }   
+    return transactionSaved
 }
 
 const saveWallet = async (w) => {
@@ -38,8 +45,8 @@ const getTransactions = async() => {
     }
 }
 
-const getTransaction =  async (id) => {
-    const transaction = TransactionModel.findById(id).exec();
+const getTransaction =  async (tx) => {
+    const transaction = await TransactionModel.findOne({tx: tx});
     return transaction
 }
 

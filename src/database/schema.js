@@ -13,10 +13,12 @@ const WalletSchema = new Schema({
 });
 
 const TransactionSchema = new Schema({
-    tx: String,
-    from: String,
-    to: String,
-    amount: String
+    tx: {type: String, required: true},
+    from: Number,
+    to: Number,
+    amount: Number
+}, {
+    versionKey: false, // You should be aware of the outcome after set to false
 });
 
 // To use our schema definition, we need to convert it
