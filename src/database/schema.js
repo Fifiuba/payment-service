@@ -4,10 +4,12 @@ const {Schema} = mongoose;
 // Each schema maps to a MongoDB collection and defines
 // the shape of the documents within that collection
 const WalletSchema = new Schema({
-    user_id: Number,
+    user_id: {type: Number, required: true},
     address: String,
     privateKey: String,
     amount: Number
+}, {
+    versionKey: false, // You should be aware of the outcome after set to false
 });
 
 const TransactionSchema = new Schema({
