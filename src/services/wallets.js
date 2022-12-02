@@ -1,5 +1,8 @@
 const ethers = require("ethers");
-const accounts = [];
+const {
+  saveWallet,
+  getWallet,
+  getWallets} = require('./databaseInteraction') ;
 
 const getDeployerWallet =
   ({ config }) =>
@@ -12,36 +15,34 @@ const getDeployerWallet =
 
 const createWallet =
   ({ config }) =>
-  async () => {
+  async user_id => {
     const provider = new ethers.providers.AlchemyProvider(config.network, process.env.ALCHEMY_API_KEY);
     // This may break in some environments, keep an eye on it
     const wallet = ethers.Wallet.createRandom().connect(provider);
-    accounts.push({
+    const walletModel = {
+      user_id: user_id,
       address: wallet.address,
-      privateKey: wallet.privateKey,
-    });
-    const result = {
-      id: accounts.length,
-      address: wallet.address,
-      privateKey: wallet.privateKey,
-    };
-    return result;
+      privateKey:wallet.privateKey,
+      amount:0,
+    }
+    const walletSaved = saveWallet(walletModel);
+    return walletSaved;
   };
 
 const getWalletsData = () => () => {
-  return accounts;
+  return getWallets();
 };
 
 const getWalletData = () => index => {
-  return accounts[index - 1];
+  return getWallet(index);
 };
 
-const getWallet =
+const getWalletFromProvider =
   ({ config }) =>
   index => {
     const provider = new ethers.providers.AlchemyProvider(config.network, process.env.ALCHEMY_API_KEY);
-
-    return new ethers.Wallet(accounts[index - 1].privateKey, provider);
+    const privateKey = getWallet(index).privateKey
+    return new ethers.Wallet(privateKey, provider);
   };
 
 module.exports = ({ config }) => ({
@@ -49,5 +50,5 @@ module.exports = ({ config }) => ({
   getDeployerWallet: getDeployerWallet({ config }),
   getWalletsData: getWalletsData({ config }),
   getWalletData: getWalletData({ config }),
-  getWallet: getWallet({ config }),
+  getWalletFromProvider: getWalletFromProvider({ config }),
 });

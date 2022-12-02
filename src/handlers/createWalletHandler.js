@@ -1,20 +1,20 @@
 function schema() {
   return {
-    params: {
-      type: "object",
-      properties: {
-        id: {
-          type: "integer",
-        },
-      },
+    body: {
+      type:'object',
+      properties:{
+        user_id: {type: 'integer'}
+      }
     },
-    required: ["id"],
+    required: ["user_id"],
   };
 }
 
 function handler({ walletService }) {
   return async function (req, reply) {
-    const body = await walletService.createWallet();
+    const body = await walletService.createWallet(req.body.user_id);
+    
+    if(!body) return reply.code(500).send({message:'Internal Server Error'});  
     return reply.code(200).send(body);
   };
 }
