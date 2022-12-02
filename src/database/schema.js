@@ -7,16 +7,16 @@ const WalletSchema = new Schema({
     user_id: {type: Number, required: true},
     address: String,
     privateKey: String,
-    amount: Number
+    amount: String
 }, {
     versionKey: false, // You should be aware of the outcome after set to false
 });
 
 const TransactionSchema = new Schema({
     tx: {type: String, required: true},
-    from: Number,
-    to: Number,
-    amount: Number
+    from: String,
+    to: String,
+    amount: String
 }, {
     versionKey: false, // You should be aware of the outcome after set to false
 });

@@ -28,7 +28,7 @@ const createWallet =
       amount:0,
     }
     console.log(`inserting wallet into db with user_id: ${user_id}`)
-    const walletSaved = saveWallet(walletModel);
+    const walletSaved = await saveWallet(walletModel);
     return walletSaved;
   };
 
@@ -44,8 +44,13 @@ const getWalletFromProvider =
   ({ config }) =>
   index => {
     const provider = new ethers.providers.AlchemyProvider(config.network, process.env.ALCHEMY_API_KEY);
-    const privateKey = getWallet(index).privateKey
-    return new ethers.Wallet(privateKey, provider);
+    console.log(`index: ${index}`)
+    const wallet = getWallet(index)
+    console.log(`provider: ${provider}`)
+    console.log(`wallet: ${JSON.stringify(wallet)}`)
+    console.log(`private key: ${wallet.privateKey}`)
+    
+    return new ethers.Wallet(wallet.privateKey, provider);
   };
 
 module.exports = ({ config }) => ({

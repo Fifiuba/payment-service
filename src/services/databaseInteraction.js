@@ -69,7 +69,7 @@ const getWallets =  async() => {
 }
 
 const getWallet = async (user_id) => {
-    const wallet = await WalletModel.findOne({user_id: user_id});
+    const wallet = await WalletModel.findOne({'user_id': user_id});
     return wallet
 }
 

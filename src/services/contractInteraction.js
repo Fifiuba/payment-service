@@ -47,6 +47,9 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
 
 const sendPayment = ({ config }) => async (receiverWallet, amountToReceive) => {
   const basicPayments = await getContract(config, receiverWallet);
+  console.log(`receiver addres: ${receiverWallet.address}`)
+  console.log(`amount to receive: ${amountToReceive}`)
+
   const tx = await basicPayments.sendPayment({
     value: await ethers.utils.parseEther(amountToReceive).toHexString(),
   });
