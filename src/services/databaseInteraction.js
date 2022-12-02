@@ -28,12 +28,12 @@ const saveWallet = async (w) => {
         const wallet = new WalletModel(w)
         walletSaved =  await wallet.save();
         console.log('wallet saved:' + JSON.stringify(walletSaved))
+        return walletSaved
     } catch (error) {
         //console.error('could not insert new wallet to database')
         console.log('could not insert new wallet to database')
+        return null
     } 
-    return walletSaved
-    
 }
 
 const getTransactions = async() => {
