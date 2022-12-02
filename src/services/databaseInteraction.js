@@ -47,7 +47,7 @@ const saveWallet = async (w) => {
 
 const getTransactions = async() => {
     try {
-        const transactions = TransactionModel.find({});
+        const transactions = await TransactionModel.find({});
         return transactions
     } catch (error) {
         console.error('could not execute find all transactions')
@@ -61,7 +61,7 @@ const getTransaction =  async (tx) => {
 
 const getWallets =  async() => {
     try {
-        const wallets = WalletModel.find({});
+        const wallets = await WalletModel.find({});
         return wallets
     } catch (error) {
         console.error('could not execute find all wallets')
@@ -69,7 +69,9 @@ const getWallets =  async() => {
 }
 
 const getWallet = async (user_id) => {
-    const wallet = await WalletModel.findOne({'user_id': user_id});
+    const wallet = await WalletModel.findOne({user_id: user_id});
+    console.log('log from db interaction: ')
+    console.log(wallet)
     return wallet
 }
 

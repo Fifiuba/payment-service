@@ -3,8 +3,8 @@ const getDepositHandler = require("../handlers/getDepositHandler");
 //const databaseInteraction = require('./databaseInteraction')
 
 const getContract = (config, wallet) => {
-  console.log(config.contractAddress)
-  console.log(config.wallet)
+  console.log(config)
+  console.log(wallet)
   return new ethers.Contract(config.contractAddress, config.contractAbi, wallet);
 };
 
@@ -49,10 +49,13 @@ const sendPayment = ({ config }) => async (receiverWallet, amountToReceive) => {
   const basicPayments = await getContract(config, receiverWallet);
   console.log(`receiver addres: ${receiverWallet.address}`)
   console.log(`amount to receive: ${amountToReceive}`)
-
+  console.log('ethers to hex string ' + await ethers.utils.parseEther(amountToReceive).toHexString())
   const tx = await basicPayments.sendPayment({
     value: await ethers.utils.parseEther(amountToReceive).toHexString(),
   });
+  console.log(`basic payments: ${tx}`)
+  console.log('hexString pasa bien')
+
   tx.wait(1).then(
     receipt => {
       console.log("Transaction mined");
@@ -61,6 +64,7 @@ const sendPayment = ({ config }) => async (receiverWallet, amountToReceive) => {
       if (firstEvent && firstEvent.event == "PaymentMade") {
         // TODO: guardar en bd con el formato correcto
         //databaseInteraction.saveTransaction(tx)
+        console.log('llego bien hasta hacer el pago')
         deposits[tx.hash] = {
           senderAddress: firstEvent.args.sender,
           amountSent: firstEvent.args.amount,

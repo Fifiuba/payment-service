@@ -42,11 +42,11 @@ const getWalletData = () => index => {
 
 const getWalletFromProvider =
   ({ config }) =>
-  index => {
+  async index => {
     const provider = new ethers.providers.AlchemyProvider(config.network, process.env.ALCHEMY_API_KEY);
     console.log(`index: ${index}`)
-    const wallet = getWallet(index)
-    console.log(`provider: ${provider}`)
+    const wallet = await getWallet(index)
+    console.log(`provider: ${JSON.stringify(provider)}`)
     console.log(`wallet: ${JSON.stringify(wallet)}`)
     console.log(`private key: ${wallet.privateKey}`)
     
