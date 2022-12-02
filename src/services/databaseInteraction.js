@@ -2,7 +2,11 @@ const { WalletModel, TransactionModel } = require('../database/schema');
 
 
 const saveTransaction = async (t) => {
-    let transactionSaved = await TransactionModel.findOne({tx: t.tx}) 
+    let transactionSaved = null
+    try{
+        transactionSaved = await TransactionModel.findOne({tx: t.tx}) 
+    }catch(error){}
+    
     if (transactionSaved){
         console.log('There is an already saved transaction for this user')
         return transactionSaved
@@ -19,7 +23,11 @@ const saveTransaction = async (t) => {
 }
 
 const saveWallet = async (w) => {
-    let walletSaved = await WalletModel.findOne({user_id: w.user_id}) 
+    let walletSaved = null
+    try{
+        walletSaved = await WalletModel.findOne({user_id: w.user_id}) 
+    }catch(error){}
+
     if (walletSaved){
         console.log('There is an already saved wallet for this user')
         return walletSaved
