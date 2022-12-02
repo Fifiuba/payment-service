@@ -18,13 +18,16 @@ const createWallet =
   async user_id => {
     const provider = new ethers.providers.AlchemyProvider(config.network, process.env.ALCHEMY_API_KEY);
     // This may break in some environments, keep an eye on it
+    console.log('creating random wallet')
     const wallet = ethers.Wallet.createRandom().connect(provider);
+    console.log(`wallet created with address: ${wallet.address}`)
     const walletModel = {
       user_id: user_id,
       address: wallet.address,
       privateKey:wallet.privateKey,
       amount:0,
     }
+    console.log(`inserting wallet into db with user_id: ${user_id}`)
     const walletSaved = saveWallet(walletModel);
     return walletSaved;
   };

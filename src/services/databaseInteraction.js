@@ -40,6 +40,7 @@ const saveWallet = async (w) => {
     } catch (error) {
         //console.error('could not insert new wallet to database')
         console.log('could not insert new wallet to database')
+        console.error(`error: ${error}`)
         return null
     } 
 }
