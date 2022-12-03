@@ -3,8 +3,6 @@ const getDepositHandler = require("../handlers/getDepositHandler");
 //const databaseInteraction = require('./databaseInteraction')
 
 const getContract = (config, wallet) => {
-  console.log(config)
-  console.log(wallet)
   return new ethers.Contract(config.contractAddress, config.contractAbi, wallet);
 };
 
@@ -46,13 +44,17 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
 
 
 const sendPayment = ({ config }) => async (receiverWallet, amountToReceive) => {
-  const basicPayments = await getContract(config, ethers.Wallet.fromMnemonic(config.deployerMnemonic));
-  console.log(`receiver addres: ${receiverWallet.address}`)
-  console.log(`amount to receive: ${amountToReceive}`)
-  console.log('ethers to hex string ' + await ethers.utils.parseEther(amountToReceive))
+  let walletFromMnemonic = ethers.Wallet.fromMnemonic(config.deployerMnemonic)
+  let walletPrueba = {
+    _isSigner:walletFromMnemonic._isSigner,
+    address: walletFromMnemonic.address,
+    provider: receiverWallet.provider
+  }
+
+  const basicPayments = getContract(config, walletPrueba);
+  console.log('aca llega bienn')
   const tx = await basicPayments.sendPayment(receiverWallet.address, ethers.utils.parseEther(amountToReceive), {gasLimit: 1000, gasPrice: 10});
-  console.log(`basic payments: ${tx}`)
-  console.log('hexString pasa bien')
+
 
   tx.wait(1).then(
     receipt => {
