@@ -46,13 +46,11 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
 
 
 const sendPayment = ({ config }) => async (receiverWallet, amountToReceive) => {
-  const basicPayments = await getContract(config, receiverWallet);
+  const basicPayments = await getContract(config, ethers.Wallet.fromMnemonic(config.deployerMnemonic));
   console.log(`receiver addres: ${receiverWallet.address}`)
   console.log(`amount to receive: ${amountToReceive}`)
-  console.log('ethers to hex string ' + await ethers.utils.parseEther(amountToReceive).toHexString())
-  const tx = await basicPayments.sendPayment({
-    value: await ethers.utils.parseEther(amountToReceive).toHexString(),
-  });
+  console.log('ethers to hex string ' + await ethers.utils.parseEther(amountToReceive))
+  const tx = await basicPayments.sendPayment(receiverWallet.address, ethers.utils.parseEther(amountToReceive), {gasLimit: 1000, gasPrice: 10});
   console.log(`basic payments: ${tx}`)
   console.log('hexString pasa bien')
 
