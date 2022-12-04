@@ -14,7 +14,6 @@ const saveTransaction = async (t) => {
     try {
         const transaction = new TransactionModel(t)
         transactionSaved =  await transaction.save();
-        console.log(transactionSaved)
         console.log('transaction saved:' + JSON.stringify(transactionSaved))
     } catch (error) {
         console.error('could not insert new transaction to database')
@@ -38,20 +37,14 @@ const saveWallet = async (w) => {
         console.log('wallet saved:' + JSON.stringify(walletSaved))
         return walletSaved
     } catch (error) {
-        //console.error('could not insert new wallet to database')
-        console.log('could not insert new wallet to database')
-        console.error(`error: ${error}`)
+        console.error('could not insert new wallet to database')
         return null
     } 
 }
 
 const getTransactions = async() => {
-    try {
-        const transactions = await TransactionModel.find({});
-        return transactions
-    } catch (error) {
-        console.error('could not execute find all transactions')
-    }
+    const transactions = await TransactionModel.find({});
+    return transactions
 }
 
 const getTransaction =  async (tx) => {
@@ -59,19 +52,21 @@ const getTransaction =  async (tx) => {
     return transaction
 }
 
+const getUserTransactions = async(id) => {
+    const fromTransactions = await TransactionModel.find({from: id.toString()});
+    const toTransactions = await TransactionModel.find({to: id.toString()});
+    let transactions = fromTransactions.concat(toTransactions)
+    return transactions
+
+}
+
 const getWallets =  async() => {
-    try {
-        const wallets = await WalletModel.find({});
-        return wallets
-    } catch (error) {
-        console.error('could not execute find all wallets')
-    }
+    const wallets = await WalletModel.find({});
+    return wallets
 }
 
 const getWallet = async (user_id) => {
     const wallet = await WalletModel.findOne({user_id: user_id});
-    console.log('log from db interaction: ')
-    console.log(wallet)
     return wallet
 }
 
@@ -83,4 +78,5 @@ module.exports = {
     getTransactions,
     getWallet,
     getWallets,
+    getUserTransactions
 };

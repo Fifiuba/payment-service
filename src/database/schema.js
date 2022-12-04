@@ -7,7 +7,6 @@ const WalletSchema = new Schema({
     user_id: {type: Number, required: true},
     address: String,
     privateKey: String,
-    amount: String
 }, {
     versionKey: false, // You should be aware of the outcome after set to false
 });
