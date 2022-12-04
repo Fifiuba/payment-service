@@ -44,13 +44,9 @@ const getWalletFromProvider =
   ({ config }) =>
   async index => {
     const provider = new ethers.providers.AlchemyProvider(config.network, process.env.ALCHEMY_API_KEY);
-    console.log(`index: ${index}`)
-    const wallet = await getWallet(index)
-    console.log(`provider: ${JSON.stringify(provider)}`)
-    console.log(`wallet: ${JSON.stringify(wallet)}`)
-    console.log(`private key: ${wallet.privateKey}`)
-    
-    return new ethers.Wallet(wallet.privateKey, provider);
+    const wallet = await getWallet(index)  
+    const walletObject = new ethers.Wallet(wallet.privateKey,provider)  
+    return walletObject;
   };
 
 module.exports = ({ config }) => ({

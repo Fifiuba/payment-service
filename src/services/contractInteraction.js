@@ -1,6 +1,9 @@
 const ethers = require("ethers");
 const getDepositHandler = require("../handlers/getDepositHandler");
-//const databaseInteraction = require('./databaseInteraction')
+const {
+  saveTransaction,
+  getTransaction,
+  getTransactions} = require('./databaseInteraction') ;
 
 const getContract = (config, wallet) => {
   return new ethers.Contract(config.contractAddress, config.contractAbi, wallet);
@@ -9,9 +12,9 @@ const getContract = (config, wallet) => {
 const deposits = {};
 
 const deposit = ({ config }) => async (senderWallet, amountToSend) => {
-  const basicPayments = await getContract(config, senderWallet);
+  const basicPayments = getContract(config, senderWallet);
   const tx = await basicPayments.deposit({
-    value: await ethers.utils.parseEther(amountToSend).toHexString(),
+    value: ethers.utils.parseEther(amountToSend).toHexString(),
   });
   tx.wait(1).then(
     receipt => {
@@ -19,12 +22,13 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
       const firstEvent = receipt && receipt.events && receipt.events[0];
       console.log(firstEvent);
       if (firstEvent && firstEvent.event == "DepositMade") {
-        // TODO: guardar en bd
-        //databaseInteraction.saveTransaction(tx)
-        deposits[tx.hash] = {
-          senderAddress: firstEvent.args.sender,
-          amountSent: firstEvent.args.amount,
-        };
+        const transaction = {
+          tx: tx.hash,
+          from: tx.from,
+          to: tx.to,
+          amount: firstEvent.args.amount
+        }
+        saveTransaction(transaction)
       } else {
         console.error(`Payment not created in tx ${tx.hash}`);
       }
@@ -43,32 +47,22 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
   };
 
 
-const sendPayment = ({ config }) => async (receiverWallet, amountToReceive) => {
-  let walletFromMnemonic = ethers.Wallet.fromMnemonic(config.deployerMnemonic)
-  let walletPrueba = {
-    _isSigner:walletFromMnemonic._isSigner,
-    address: walletFromMnemonic.address,
-    provider: receiverWallet.provider
-  }
-
-  const basicPayments = getContract(config, walletPrueba);
-  console.log('aca llega bienn')
-  const tx = await basicPayments.sendPayment(receiverWallet.address, ethers.utils.parseEther(amountToReceive), {gasLimit: 1000, gasPrice: 10});
-
-
+const sendPayment = ({ config }) => async (receiverWallet, amountToReceive,owner) => {
+  const basicPayments = getContract(config, owner);
+  const tx = await basicPayments.sendPayment(receiverWallet, ethers.utils.parseEther(amountToReceive));
   tx.wait(1).then(
     receipt => {
       console.log("Transaction mined");
       const firstEvent = receipt && receipt.events && receipt.events[0];
       console.log(firstEvent);
       if (firstEvent && firstEvent.event == "PaymentMade") {
-        // TODO: guardar en bd con el formato correcto
-        //databaseInteraction.saveTransaction(tx)
-        console.log('llego bien hasta hacer el pago')
-        deposits[tx.hash] = {
-          senderAddress: firstEvent.args.sender,
-          amountSent: firstEvent.args.amount,
-        };
+        const transaction = {
+          tx: tx.hash,
+          from: tx.from,
+          to: tx.to,
+          amount: firstEvent.args.amount
+        }
+        saveTransaction(transaction)
       } else {
         console.error(`Payment not created in tx ${tx.hash}`);
       }

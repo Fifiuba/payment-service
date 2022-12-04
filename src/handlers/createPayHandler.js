@@ -1,3 +1,5 @@
+const { getWallet } = require("../services/databaseInteraction");
+
 function schema() {
     return {
       params: {
@@ -17,10 +19,9 @@ function schema() {
   
   function handler({ contractInteraction, walletService }) {
     return async function (req) {
-      console.log(`request body: ${JSON.stringify(req.body)}`)
-      const walletFromProvider = await walletService.getWalletFromProvider(req.body.receiverId);
-      console.log(`la wallet from provider: ${walletFromProvider}`)
-      return contractInteraction.sendPayment(walletFromProvider, req.body.amountInEthers);
+      const ownerWallet =  walletService.getDeployerWallet(); 
+      const wallet = await getWallet(req.body.receiverId)
+      return contractInteraction.sendPayment(wallet.address, req.body.amountInEthers,ownerWallet);
     };
   }
   
