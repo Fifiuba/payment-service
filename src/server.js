@@ -1,20 +1,7 @@
-const config = require("./config");
-const services = require("./services/services")({ config });
-const routes = require("./routes");
 const {PaymentsDatabase} = require('./database/database');
 require('dotenv').config();
+const {buildApp} = require('./app')
 
-// Require the framework and instantiate it
-const fastify = require("fastify")({ logger: true });
-
-// Declares routes
-routes.forEach(route => fastify.route(route({ config, services })));
-
-//connect to db
-const db = new PaymentsDatabase();
-db.connectDB()
-
-// Run the server!
 const start = async () => {
   try {
     await fastify.listen(3000, '0.0.0.0');
@@ -25,4 +12,9 @@ const start = async () => {
   }
 };
 
+const fastify = buildApp();
+//connect to db
+const db = new PaymentsDatabase();
+db.connectDB()
+// Run the server!
 start();
