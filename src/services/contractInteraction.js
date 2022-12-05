@@ -82,8 +82,7 @@ const sendPayment = ({ config }) => async (receiverWallet, amountToReceive,owner
 
 
 const getDepositReceipt = ({}) => async depositTxHash => {
-  //return databaseInteraction.getTransaction(depositTxHash)
-  return deposits[depositTxHash];
+  return await getTransaction(depositTxHash)
 };
 
 

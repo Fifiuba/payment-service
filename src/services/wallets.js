@@ -40,12 +40,23 @@ const getWalletData = () => index => {
   return getWallet(index);
 };
 
+const getWalletBalance = 
+  ({ config }) =>
+  async index => {
+    const provider = new ethers.providers.AlchemyProvider(config.network, process.env.ALCHEMY_API_KEY);
+    const wallet = await getWallet(index)  
+    const walletObject = new ethers.Wallet(wallet.privateKey,provider)
+    let balance = await walletObject.getBalance()
+    return {balance: JSON.parse(balance).hex}
+  }
+
 const getWalletFromProvider =
   ({ config }) =>
   async index => {
     const provider = new ethers.providers.AlchemyProvider(config.network, process.env.ALCHEMY_API_KEY);
     const wallet = await getWallet(index)  
     const walletObject = new ethers.Wallet(wallet.privateKey,provider)  
+    
     return walletObject;
   };
 
@@ -55,4 +66,5 @@ module.exports = ({ config }) => ({
   getWalletsData: getWalletsData({ config }),
   getWalletData: getWalletData({ config }),
   getWalletFromProvider: getWalletFromProvider({ config }),
+  getWalletBalance: getWalletBalance({config}),
 });

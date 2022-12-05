@@ -89,6 +89,6 @@
     "deploy-local": "hardhat deploy --network hardhat",
     "start": "node src/server",
     "release": "standard-version",
-    "jestTest" : "jest --silent=false databaseInteraction"
+    "jestTest" : "jest --silent=false databaseInteraction app"
   }
 }

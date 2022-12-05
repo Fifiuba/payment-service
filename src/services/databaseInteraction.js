@@ -53,11 +53,8 @@ const getTransaction =  async (tx) => {
 }
 
 const getUserTransactions = async(id) => {
-    const fromTransactions = await TransactionModel.find({from: id.toString()});
-    const toTransactions = await TransactionModel.find({to: id.toString()});
-    let transactions = fromTransactions.concat(toTransactions)
+    const transactions = await TransactionModel.find({$or:[{from: id.toString()},{ to: id.toString()}]});
     return transactions
-
 }
 
 const getWallets =  async() => {
