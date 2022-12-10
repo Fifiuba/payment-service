@@ -3,6 +3,10 @@ require('dotenv').config();
 const {buildApp} = require('./app')
 
 const start = async () => {
+    const fastify = await buildApp();
+    //connect to db
+    const db = new PaymentsDatabase();
+    db.connectDB()
   try {
     await fastify.listen(3000, '0.0.0.0');
     fastify.log.info(`server listening on ${fastify.server.address().port}`);
@@ -12,9 +16,6 @@ const start = async () => {
   }
 };
 
-const fastify = buildApp();
-//connect to db
-const db = new PaymentsDatabase();
-db.connectDB()
+
 // Run the server!
 start();
