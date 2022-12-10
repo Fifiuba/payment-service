@@ -47,7 +47,7 @@ const getWalletBalance =
     const wallet = await getWallet(index)  
     const walletObject = new ethers.Wallet(wallet.privateKey,provider)
     let balance = await walletObject.getBalance()
-    return {balance: JSON.parse(balance).hex}
+    return {balance: balance.toNumber()}
   }
 
 const getWalletFromProvider =

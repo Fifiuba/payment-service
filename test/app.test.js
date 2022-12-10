@@ -182,7 +182,7 @@ describe('App tests', () => {
         expect(JSON.parse(response.body)).toMatchObject(transaction)
     });
 
-    xit('GET request balance on saved wallet', async() => {
+    it('GET request balance on saved wallet', async() => {
         const app = await buildApp();
         
         const body = {
@@ -199,7 +199,6 @@ describe('App tests', () => {
             method: 'GET',
             url: '/payment/wallet/balance/1'
         })
-        console.log(response)
         expect(response.statusCode).toBe(200)
         expect(JSON.parse(response.body).balance).toBe(0)
     });

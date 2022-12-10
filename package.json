@@ -86,7 +86,7 @@
     "prettier:list-different": "prettier --config .prettierrc --list-different \"**/*.{js,json,md,sol,ts}\"",
     "size-contracts": "hardhat size-contracts",
     "docgen": "hardhat docgen",
-    "test": "hardhat test",
+    "test": "hardhat test test/receivePayment.test.ts test/sendPayment.test.ts",
     "deploy-goerli": "hardhat deploy --network goerli",
     "deploy-local": "hardhat deploy --network hardhat",
     "start": "node src/server",
