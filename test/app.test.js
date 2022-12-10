@@ -1,7 +1,6 @@
-const {saveTransaction,saveWallet} = require('../src/services/databaseInteraction') ;
+const {saveTransaction,saveWallet, getWallet} = require('../src/services/databaseInteraction') ;
 const {buildApp} = require('../src/app')
 const {connectDB, dropDB, dropCollections} = require('./testDatabase/testDatabase');
-const app = buildApp()
 
 describe('App tests', () => {
     
@@ -18,6 +17,7 @@ describe('App tests', () => {
     });
 
     it('GET request on saved wallets', async() => {
+        const app = await buildApp();
 
         const wallet1 = {
             user_id: 1,
@@ -45,6 +45,7 @@ describe('App tests', () => {
     })
 
     it('GET request on saved wallet by user_id returns it correctly', async() => {
+        const app = await buildApp();
 
         const wallet1 = {
             user_id: 1,
@@ -72,6 +73,7 @@ describe('App tests', () => {
     });
 
     it('GET request on saved transactions', async() => {
+        const app = await buildApp();
 
         const transaction1 = {
             tx: '0x2446f1fd773fbb9f080e674b60c6a033c7ed7427b8b9413cf28a2a4a6da9b56c',
@@ -107,6 +109,7 @@ describe('App tests', () => {
     })
     
     it('GET request on saved transactions', async() => {
+        const app = await buildApp();
 
         const transaction1 = {
             tx: '0x2446f1fd773fbb9f080e674b60c6a033c7ed7427b8b9413cf28a2a4a6da9b56c',
@@ -141,7 +144,9 @@ describe('App tests', () => {
         expect(JSON.parse(response.body)).toMatchObject(expectedTransactions);
     });
 
-    xit ('POST wallet for user_id 1 should create it correctly', async () => {
+    it ('POST wallet for user_id 1 should create it correctly', async () => {
+        const app = await buildApp();
+
         const body = {
             user_id: 1
         }
@@ -158,6 +163,8 @@ describe('App tests', () => {
     });
 
     it ('GET transaction receipt for a given tx should return it correctly', async () => {
+        const app = await buildApp();
+
         const transaction = {
             tx: '0x2446f1fd773fbb9f080e674b60c6a033c7ed7427b8b9413cf28a2a4a6da9b56c',
             from: "1",
@@ -176,6 +183,7 @@ describe('App tests', () => {
     });
 
     xit('GET request balance on saved wallet', async() => {
+        const app = await buildApp();
         
         const body = {
             user_id: 1
@@ -194,7 +202,29 @@ describe('App tests', () => {
         console.log(response)
         expect(response.statusCode).toBe(200)
         expect(JSON.parse(response.body).balance).toBe(0)
-    })
+    });
+
+
+    it('DELETE request on saved wallet', async() => {
+        const app = await buildApp();
+
+        const wallet = {
+            user_id: 1,
+            address: 'fake_address',
+            privateKey: 'fake_private_key',
+        }
+        
+        await saveWallet(wallet);
+
+        const response = await app.inject({
+          method: 'DELETE',
+          url: '/payment/wallet/1'
+        })
+
+        expect(response.statusCode).toBe(200)
+        expect(await getWallet(wallet.user_id)).toBe(null)
+    });
+    
 
 
 })

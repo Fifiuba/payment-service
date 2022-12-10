@@ -8,11 +8,12 @@ const getInfo = require("./handlers/getInfoHandler");
 const getTransactionData = require("./handlers/getTransactionHandler");
 const getTransactionsData = require("./handlers/getTransactionsHandler");
 const getWalletBalance = require("./handlers/getWalletBalanceHandler");
+const deleteWallet = require("./handlers/deleteWalletHandler");
 
 function getInfoRoute({ config }) { 
   return {
     method: "GET",
-    url: "/payment",
+    url: "/",
     schema: getInfo.schema(config),
     handler: getInfo.handler(),
   };
@@ -99,6 +100,15 @@ function getWalletBalanceRoute({ services, config }) {
   };
 }
 
+function deleteWalletRoute({ services, config }) {
+  return {
+    method: "DELETE",
+    url: "/payment/wallet/:id",
+    schema: deleteWallet.schema(config),
+    handler: deleteWallet.handler({ config, ...services }),
+  };
+}
+
 module.exports = [getWalletDataRoute, 
   getWalletsDataRoute, 
   createWalletRoute, 
@@ -108,4 +118,5 @@ module.exports = [getWalletDataRoute,
   createPaymentRoute,
   getTransactionDataRoute,
   getTransactionsDataRoute,
-  getWalletBalanceRoute];
+  getWalletBalanceRoute, 
+  deleteWalletRoute]

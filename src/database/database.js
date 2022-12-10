@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 class PaymentsDatabase {
   async connectDB() {
     try {
-      await mongoose.connect('mongodb://root:root@localhost:27017/', {
+      await mongoose.connect('mongodb://root:root@mongo:27017/', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         auth: {

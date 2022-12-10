@@ -1,14 +1,13 @@
 version: '3' 
 services: 
-  # payment-service: 
-  #   container_name: payment-service
-  #   build: . 
-  #   ports:
-  #   - "3000:3000"
-  #   restart: always
-  #   depends_on:
-  #     - mongo
-
+  payment-service: 
+     container_name: payment-service
+     build: . 
+     ports:
+     - "3000:3000"
+     restart: always
+     depends_on:
+       - mongo
   mongo:
     container_name: mongo
     image: mongo:latest

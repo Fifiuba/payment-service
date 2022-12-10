@@ -67,6 +67,10 @@ const getWallet = async (user_id) => {
     return wallet
 }
 
+const deleteWallet = async (user_id) => {
+    const wallet = await WalletModel.deleteOne({user_id: user_id})
+}
+
 
 module.exports = {
     saveTransaction,
@@ -75,5 +79,6 @@ module.exports = {
     getTransactions,
     getWallet,
     getWallets,
-    getUserTransactions
+    getUserTransactions,
+    deleteWallet
 };
