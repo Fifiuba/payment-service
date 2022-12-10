@@ -68,7 +68,7 @@ const getWallet = async (user_id) => {
 }
 
 const deleteWallet = async (user_id) => {
-    const wallet = await WalletModel.deleteOne({user_id: user_id})
+    await WalletModel.deleteOne({user_id: user_id})
 }
 
 
