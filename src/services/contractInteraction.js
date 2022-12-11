@@ -9,8 +9,6 @@ const getContract = (config, wallet) => {
   return new ethers.Contract(config.contractAddress, config.contractAbi, wallet);
 };
 
-const deposits = {};
-
 const deposit = ({ config }) => async (senderWallet, amountToSend) => {
   const basicPayments = getContract(config, senderWallet);
   const tx = await basicPayments.deposit({
@@ -26,7 +24,7 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
           tx: tx.hash,
           from: tx.from,
           to: tx.to,
-          amount: firstEvent.args.amount
+          amount: parseFloat(ethers.utils.formatEther(firstEvent.args.amount))
         }
         saveTransaction(transaction)
       } else {
